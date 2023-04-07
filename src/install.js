@@ -6,8 +6,9 @@ const tc = require("@actions/tool-cache");
 
 /**
  * @param {import("./version").Version} version
+ * @param {string} overrideArch
  */
-async function install(version) {
+async function install(version, overrideArch) {
   const cachedPath = tc.find(
     "deno",
     version.isCanary ? `0.0.0-${version.version}` : version.version,
@@ -18,7 +19,7 @@ async function install(version) {
     return;
   }
 
-  const zip = zipName();
+  const zip = zipName(overrideArch);
   const url = version.isCanary
     ? `https://dl.deno.land/canary/${version.version}/${zip}`
     : `https://github.com/denoland/deno/releases/download/v${version.version}/${zip}`;
@@ -40,10 +41,13 @@ async function install(version) {
   core.addPath(denoInstallRoot);
 }
 
-/** @returns {string} */
-function zipName() {
+/**
+ * @returns {string}
+ * @param {string} overrideArch
+ */
+function zipName(overrideArch) {
   let arch;
-  let architecture = process.env.OVERRIDE_ARCH || process.arch
+  let architecture = overrideArch || process.arch
   switch (architecture) {
     case "arm64":
       arch = "aarch64";

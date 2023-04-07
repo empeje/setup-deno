@@ -15,6 +15,7 @@ function exit(message) {
 
 async function main() {
   try {
+    const overrideArch = core.getInput("override-version");
     const range = parseVersionRange(core.getInput("deno-version"));
     if (range === null) {
       exit("The passed version range is not valid.");
@@ -31,7 +32,7 @@ async function main() {
       } version ${version.version}.`,
     );
 
-    await install(version);
+    await install(version, overrideArch);
 
     core.setOutput("deno-version", version.version);
     core.setOutput("is-canary", version.isCanary);
