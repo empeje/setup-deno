@@ -15,7 +15,7 @@ function exit(message) {
 
 async function main() {
   try {
-    const overrideArch = core.getInput("override-version");
+    const overrideArch = core.getInput("override-arch");
     const range = parseVersionRange(core.getInput("deno-version"));
     if (range === null) {
       exit("The passed version range is not valid.");
