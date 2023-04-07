@@ -43,7 +43,8 @@ async function install(version) {
 /** @returns {string} */
 function zipName() {
   let arch;
-  switch (process.arch) {
+  let architecture = process.env.OVERRIDE_ARCH || process.arch
+  switch (architecture) {
     case "arm64":
       arch = "aarch64";
       break;
